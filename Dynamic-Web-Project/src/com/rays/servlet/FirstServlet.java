@@ -25,7 +25,7 @@ public class FirstServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		System.out.println("in do get method...");
+		System.out.println("in do post method...");
 
 		System.out.println(request.getParameter("firstName"));
 		System.out.println(request.getParameter("lastName"));
