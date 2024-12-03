@@ -1,7 +1,6 @@
 package com.rays.ctl;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -11,18 +10,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rays.bean.UserBean;
-import com.rays.model.UserModel;
+import com.rays.bean.MarksheetBean;
+import com.rays.model.MarksheetModel;
 
-@WebServlet("/UserListCtl.do")
-public class UserListCtl extends HttpServlet {
+@WebServlet("/MarksheetListCtl.do")
+public class MarksheetListCtl extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		UserModel model = new UserModel();
-		UserBean bean = new UserBean();
+		MarksheetBean bean = new MarksheetBean();
+		MarksheetModel model = new MarksheetModel();
 
 		try {
 			List list = model.search(bean);
@@ -32,7 +31,7 @@ public class UserListCtl extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		RequestDispatcher rd = request.getRequestDispatcher("UserListView.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("MarksheetListView.jsp");
 		rd.forward(request, response);
 
 	}
@@ -43,56 +42,49 @@ public class UserListCtl extends HttpServlet {
 
 		String op = request.getParameter("operation");
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		UserModel model = new UserModel();
-		UserBean bean = new UserBean();
+		MarksheetBean bean = new MarksheetBean();
+		MarksheetModel model = new MarksheetModel();
 
 		String[] ids = request.getParameterValues("ids");
-
+		System.out.println(ids);
 		try {
-
 			if (op.equals("delete")) {
 
 				if (ids != null && ids.length > 0) {
 
 					for (String id : ids) {
+						
+						System.out.println(id);
 
 						model.delete(Integer.parseInt(id));
 
 					}
+
 				} else {
 					System.out.println("select at least one record");
 				}
+
 			}
 
 			if (op.equals("search")) {
 
 				System.out.println("in search condition");
 
-				bean.setFirstName(request.getParameter("firstName"));
-				bean.setLastName(request.getParameter("lastName"));
-				bean.setLoginId(request.getParameter("loginId"));
-				bean.setAddress(request.getParameter("address"));
-				if (request.getParameter("dob") != null && request.getParameter("dob") != "") {
-
-					bean.setDob(sdf.parse(request.getParameter("dob")));
-
-				}
-
+				bean.setName(request.getParameter("name"));
+				bean.setRoll_no(request.getParameter("roll_no"));
+				
 			}
-
+			
 			List list = model.search(bean);
 			request.setAttribute("list", list);
-
+			
 		} catch (Exception e) {
-
 			System.out.println(e.getMessage());
-
 		}
 
-		RequestDispatcher rd = request.getRequestDispatcher("UserListView.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("MarksheetListView.jsp");
 		rd.forward(request, response);
-
+		
 	}
 
 }

@@ -13,14 +13,34 @@ import javax.servlet.http.HttpServletResponse;
 import com.rays.bean.UserBean;
 import com.rays.model.UserModel;
 
-@WebServlet("/UserCtl")
+@WebServlet("/UserCtl.do")
 public class UserCtl extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.sendRedirect("UserView.jsp");
+		String id = request.getParameter("id");
+
+		System.out.println("id ===> " + id);
+
+		UserModel model = new UserModel();
+		UserBean bean = new UserBean();
+
+		if (id != null && id.length() > 0) {
+
+			try {
+				bean = model.findById(Integer.parseInt(id));
+				request.setAttribute("bean", bean);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+		}
+
+		RequestDispatcher rd = request.getRequestDispatcher("UserView.jsp");
+		rd.forward(request, response);
 
 	}
 
@@ -30,6 +50,8 @@ public class UserCtl extends HttpServlet {
 
 		String op = request.getParameter("operation");
 
+		System.out.println("op ==== > " + op);
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		String firstName = request.getParameter("firstName");
@@ -38,6 +60,7 @@ public class UserCtl extends HttpServlet {
 		String password = request.getParameter("password");
 		String dob = request.getParameter("dob");
 		String address = request.getParameter("address");
+		String id = request.getParameter("id");
 
 		UserBean bean = new UserBean();
 		UserModel model = new UserModel();
@@ -51,10 +74,22 @@ public class UserCtl extends HttpServlet {
 			bean.setDob(sdf.parse(dob));
 			bean.setAddress(address);
 
-			if (op.equals("save")) {
+			if (op.equals("save") || op.equals("update")) {
 
-				model.add(bean);
-				request.setAttribute("msg", "User Added Successfully");
+				if (id != null && id.length() > 0) {
+
+					System.out.println("id ==== > " + id);
+
+					bean.setId(Integer.parseInt(id));
+					model.update(bean);
+					request.setAttribute("msg", "User Updated Successfully");
+
+				} else {
+
+					model.add(bean);
+					request.setAttribute("msg", "User Added Successfully");
+
+				}
 
 			}
 
