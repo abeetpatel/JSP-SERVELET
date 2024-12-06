@@ -21,6 +21,8 @@
 	<a href="UserListCtl.do">User List</a> |
 	<a href="MarksheetCtl.do">Add Marksheet</a> |
 	<a href="MarksheetListCtl.do">MarksheetList</a> |
+	<a href="ShopCtl.do">Add Product</a> |
+	<a href="ShopListCtl.do">Product List</a> |
 	<a href="WelcomeCtl">Welcome</a> |
 	<a href="LoginCtl?operation=logout">Logout</a>
 	<%

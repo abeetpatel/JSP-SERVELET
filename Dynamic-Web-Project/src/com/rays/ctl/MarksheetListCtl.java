@@ -22,9 +22,11 @@ public class MarksheetListCtl extends HttpServlet {
 
 		MarksheetBean bean = new MarksheetBean();
 		MarksheetModel model = new MarksheetModel();
+		int pageNo = 1;
+		int pageSize = 5;
 
 		try {
-			List list = model.search(bean);
+			List list = model.search(bean, pageNo, pageSize);
 			request.setAttribute("list", list);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -41,20 +43,22 @@ public class MarksheetListCtl extends HttpServlet {
 			throws ServletException, IOException {
 
 		String op = request.getParameter("operation");
+		
+		System.out.println("op ==> " +op);
 
 		MarksheetBean bean = new MarksheetBean();
 		MarksheetModel model = new MarksheetModel();
+		int pageNo = 1;
+		int pageSize = 5;
 
 		String[] ids = request.getParameterValues("ids");
-		System.out.println(ids);
+		
 		try {
 			if (op.equals("delete")) {
 
 				if (ids != null && ids.length > 0) {
 
 					for (String id : ids) {
-						
-						System.out.println(id);
 
 						model.delete(Integer.parseInt(id));
 
@@ -72,19 +76,40 @@ public class MarksheetListCtl extends HttpServlet {
 
 				bean.setName(request.getParameter("name"));
 				bean.setRoll_no(request.getParameter("roll_no"));
-				
+
 			}
-			
-			List list = model.search(bean);
+
+			if (op.equals("previous")) {
+
+				pageNo = Integer.parseInt(request.getParameter("pageNo"));
+
+				pageNo--;
+
+				System.out.println("pageNo =>" + pageNo);
+
+			}
+
+			if (op.equals("next")) {
+
+				pageNo = Integer.parseInt(request.getParameter("pageNo"));
+
+				pageNo++;
+
+				System.out.println("pageNo =>" + pageNo);
+
+			}
+
+			List list = model.search(bean, pageNo, pageSize);
 			request.setAttribute("list", list);
-			
+			request.setAttribute("pageNo", pageNo);
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher("MarksheetListView.jsp");
 		rd.forward(request, response);
-		
+
 	}
 
 }

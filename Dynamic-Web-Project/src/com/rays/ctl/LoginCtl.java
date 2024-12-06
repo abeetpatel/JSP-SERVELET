@@ -46,7 +46,8 @@ public class LoginCtl extends HttpServlet {
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
 
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(true);
+
 		System.out.println("session id ==== > " + session.getId());
 
 		if (op.equals("SignIn")) {

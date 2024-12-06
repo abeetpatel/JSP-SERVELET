@@ -160,7 +160,7 @@ public class MarksheetModel {
 
 	}
 
-	public List search(MarksheetBean been) throws Exception {
+	public List search(MarksheetBean been, int pageNo, int pageSize) throws Exception {
 
 		Connection conn = JDBCDataSource.getConnection();
 
@@ -175,6 +175,14 @@ public class MarksheetModel {
 
 			if (been.getRoll_no() != null && been.getRoll_no().length() > 0) {
 				sql.append(" and roll_no like '" + been.getRoll_no() + "%'");
+
+			}
+
+			if (pageSize > 0) {
+
+				pageNo = (pageNo - 1) * pageSize;
+
+				sql.append(" limit " + pageNo + " , " + pageSize);
 
 			}
 

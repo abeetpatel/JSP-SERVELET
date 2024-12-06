@@ -3,7 +3,6 @@ package com.rays.ctl;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,18 +10,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rays.bean.UserBean;
-import com.rays.model.UserModel;
+import com.rays.bean.ShopBean;
+import com.rays.model.ShopModel;
 
-@WebServlet("/UserListCtl.do")
-public class UserListCtl extends HttpServlet {
+@WebServlet("/ShopListCtl.do")
+public class ShopListCtl extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		UserModel model = new UserModel();
-		UserBean bean = new UserBean();
+		ShopBean bean = new ShopBean();
+		ShopModel model = new ShopModel();
 
 		try {
 			List list = model.search(bean, 1, 5);
@@ -32,7 +31,7 @@ public class UserListCtl extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		RequestDispatcher rd = request.getRequestDispatcher("UserListView.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("ShopListView.jsp");
 		rd.forward(request, response);
 
 	}
@@ -43,11 +42,11 @@ public class UserListCtl extends HttpServlet {
 
 		String op = request.getParameter("operation");
 
-		System.out.println("op === > " + op);
+		System.out.println("op ==>> " + op);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		UserModel model = new UserModel();
-		UserBean bean = new UserBean();
+		ShopBean bean = new ShopBean();
+		ShopModel model = new ShopModel();
 		int pageNo = 1;
 		int pageSize = 5;
 
@@ -64,22 +63,29 @@ public class UserListCtl extends HttpServlet {
 						model.delete(Integer.parseInt(id));
 
 					}
+
 				} else {
 					System.out.println("select at least one record");
 				}
+
 			}
 
 			if (op.equals("search")) {
 
 				System.out.println("in search condition");
 
-				bean.setFirstName(request.getParameter("firstName"));
-				bean.setLastName(request.getParameter("lastName"));
-				bean.setLoginId(request.getParameter("loginId"));
-				bean.setAddress(request.getParameter("address"));
-				if (request.getParameter("dob") != null && request.getParameter("dob") != "") {
+				bean.setProductName(request.getParameter("productName"));
+				bean.setProductCategory(request.getParameter("productCategory"));
 
-					bean.setDob(sdf.parse(request.getParameter("dob")));
+				if (request.getParameter("productPrice") != null && request.getParameter("productPrice") != "") {
+
+					bean.setProductPrice(Integer.parseInt(request.getParameter("productPrice")));
+
+				}
+
+				if (request.getParameter("purchaseDate") != null && request.getParameter("purchaseDate") != "") {
+
+					bean.setPurchaseDate(sdf.parse(request.getParameter("purchaseDate")));
 
 				}
 
@@ -107,11 +113,11 @@ public class UserListCtl extends HttpServlet {
 
 		} catch (Exception e) {
 
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 
 		}
 
-		RequestDispatcher rd = request.getRequestDispatcher("UserListView.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("ShopListView.jsp");
 		rd.forward(request, response);
 
 	}

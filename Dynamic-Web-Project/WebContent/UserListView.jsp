@@ -15,6 +15,17 @@
 
 	<%
 		List list = (List) request.getAttribute("list");
+		int pageNo = 1;
+	%>
+
+	<%
+		if (request.getAttribute("pageNo") != null) {
+	%>
+	<%
+		pageNo = (int) request.getAttribute("pageNo");
+	%>
+	<%
+		}
 	%>
 
 	<form action="UserListCtl.do" method="post">
@@ -48,6 +59,7 @@
 
 		<table width="100%" border="1px">
 			<tr style="background-color: skyblue">
+				<th>S.No</th>
 				<th>Delete</th>
 				<th>First Name</th>
 				<th>Last Name</th>
@@ -64,6 +76,7 @@
 				%>
 			
 			<tr align="center">
+				<td><%=bean.getId()%></td>
 				<td><input type="checkbox" name="ids" value="<%=bean.getId()%>"></td>
 				<td><%=bean.getFirstName()%></td>
 				<td><%=bean.getLastName()%></td>
@@ -76,13 +89,17 @@
 				}
 			%>
 		</table>
-		<table>
+		<br>
+		<table width="100%">
 			<tr>
-				<td><input type="submit" name="operation" value="delete">
-				</td>
+				<td align="left"><input type="submit" name="operation"
+					value="previous" <%=pageNo == 1 ? "disabled" : ""%>></td>
+				<td><input type="submit" name="operation" value="delete"></td>
+				<td align="right"><input type="submit" name="operation"
+					value="next" <%=list.size() != 0 ? "" : "disabled"%>></td>
 			</tr>
 		</table>
-
+		<input type="text" name="pageNo" value=<%=pageNo%>>
 	</form>
 	<%@ include file="Footer.jsp"%>
 </body>

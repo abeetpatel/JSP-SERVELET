@@ -171,7 +171,7 @@ public class UserModel {
 
 	}
 
-	public List search(UserBean bean) throws Exception {
+	public List search(UserBean bean, int pageNo, int pageSize) throws Exception {
 
 		Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -218,6 +218,14 @@ public class UserModel {
 				sql.append(" and address like '" + bean.getAddress() + "%'");
 
 			}
+
+		}
+
+		if (pageSize > 0) {
+
+			pageNo = (pageNo - 1) * pageSize;
+
+			sql.append(" limit " + pageNo + ", " + pageSize);
 
 		}
 
